@@ -1,0 +1,23 @@
+{
+  "name": "component",
+  "version": "0.0.1",
+  "description": "ICC VM component interface",
+  "author": "Josep Bernabé <jbgisber@iti.upv.es>",
+  "private": true,
+  "scripts": {
+    "clean": "if [ $(find ./ -name \"*.js\" | grep -c -v node_modules) -gt 0 ]; then rm $(find ./ -name \"*.js\" | grep -v node_modules); fi",
+    "postinstall": "npm link ../slaputils",
+    "doc": "node_modules/.bin/docco *.coffee"
+  },
+  "main": "src/index",
+  "dependencies": {
+    "coffee-script": "~1.4.0",
+    "slaputils":"git+https://vcs.slapcloud:L30sl4pkl01d@projects.iti.upv.es/git/slapcloud/slaputils.git#master"
+  },
+  "engines": {
+    "node": "~0.10.0"
+  },
+  "os": [
+    "linux"
+  ]
+}
