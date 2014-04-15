@@ -6,7 +6,6 @@
   "private": true,
   "scripts": {
     "clean": "if [ $(find ./ -name \"*.js\" | grep -c -v node_modules) -gt 0 ]; then rm $(find ./ -name \"*.js\" | grep -v node_modules); fi",
-    "postinstall": "npm link ../slaputils",
     "doc": "node_modules/.bin/docco *.coffee"
   },
   "main": "src/index",
