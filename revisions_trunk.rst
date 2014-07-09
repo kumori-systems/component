@@ -48,3 +48,8 @@ t14.06
 ------
 
 **t14.06rev0001** 2014-06-09 clorente: Actualizado a CoffeeScript 1.7.1. #46, [36e138cdd965536fed3ab1a8f4a76be169717734 - eb0560024c232f89a59db0a2076e32edf7303d43].
+
+t14.07
+------
+
+**t14.07rev0000** 2014-07-09 clorente: Añadida dependencia con docco. #54, [f25ce040bc7cc7aef64c8446fae37eed7ee33053 - f25ce040bc7cc7aef64c8446fae37eed7ee33053].
