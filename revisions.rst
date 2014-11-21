@@ -39,3 +39,5 @@ Normas
 
 -----------------------------------------------------------------------------------
 
+
+**t14.11rev0000** 2014-11-21 emiedes: Se añaden merge_to_develop.sh y revisions.rst (ticket #89). #89, [0245cfbc6c8c0047d040c7aa668d863bd31a12f3 - 0245cfbc6c8c0047d040c7aa668d863bd31a12f3].
