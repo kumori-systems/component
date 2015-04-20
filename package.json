@@ -11,7 +11,7 @@
   "main": "src/index",
   "dependencies": {
     "coffee-script": "~1.7.1",
-    "slaputils":"git+https://vcs.slapcloud:L30sl4pkl01d@projects.iti.upv.es/git/slapcloud/slaputils.git#master"
+    "slaputils":"git+ssh://git@gitlab.iti.upv.es:iti_kumori_paas/slap-utils.git#master"
   },
   "devDependencies": {
     "docco": "~0.6.3"
