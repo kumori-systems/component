@@ -15,6 +15,9 @@ class Component
     # * `parameters`: key-value parameters set.
     # * `dependencies`: array of dependent channels references.
     # * `offerings`: array of offered channels references.
+    # * `done`: (*optional*) callback method to be called once the construction
+    #    process finishes. Should be used if the constructor involves
+    #    asynchronous code.
     constructor: (@runtime, @role, @iid, @incnum, @localData, @parameters, @dependencies, @offerings) ->
         # TODO
 
