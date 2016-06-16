@@ -1,5 +1,4 @@
 errors = require "./errors"
-slaputils = require "slaputils"
 
 class Component
 
@@ -20,6 +19,7 @@ class Component
   #    asynchronous code.
   constructor: (@runtime, @role, @iid, @incnum, @localData, @parameters
   , @dependencies, @offerings) ->
+    @runtime.setLogger [Component]
     # TODO
 
   # Starts the execution.
@@ -43,7 +43,5 @@ class Component
   # Returns: `true` if the reconfig can be take and `false` otherwise.
   reconfig: (parameters) ->
     return true
-
-slaputils.setLogger [Component]
 
 module.exports = Component
