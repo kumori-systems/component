@@ -1,4 +1,4 @@
-errors = require "./errors"
+errors = require './errors'
 
 class Component
 
@@ -17,8 +17,8 @@ class Component
   # * `done`: (*optional*) callback method to be called once the construction
   #    process finishes. Should be used if the constructor involves
   #    asynchronous code.
-  constructor: (@runtime, @role, @iid, @incnum, @localData, @parameters
-  , @dependencies, @offerings) ->
+  constructor: (@runtime, @role, @iid, @incnum, @localData, @resources
+  ,@parameters, @dependencies, @offerings) ->
     @runtime.setLogger [Component]
     # TODO
 
@@ -26,7 +26,7 @@ class Component
   run: ->
     @pid = setInterval =>
       @runtime.ping()
-    ,PING_INTERVAL
+    , PING_INTERVAL
 
   # Saves the state and stops the execution.
   shutdown: ->
@@ -41,7 +41,7 @@ class Component
   # * `parameters`: the new parameters.
   #
   # Returns: `true` if the reconfig can be take and `false` otherwise.
-  reconfig: (parameters) ->
+  reconfig: (resources, parameters) ->
     return true
 
 module.exports = Component
