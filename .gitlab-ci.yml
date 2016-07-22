@@ -1,0 +1,30 @@
+image: slap_gitlab_node_zmq:latest
+
+variables:
+  PROJECT: "component"
+
+test_master:
+  stage: test
+  script:
+    - npm version
+    - npm install
+    - npm run spec
+    - npm run lint
+  artifacts:
+    paths:
+      - node_modules
+  only:
+    - master@iti_kumori_paas/component
+    - triggers
+
+test:
+  stage: test
+  script:
+    - npm version
+    - npm install
+    - npm run spec
+    - npm run lint
+  except:
+    - master@iti_kumori_paas/component
+    - triggers
+
