@@ -1,5 +1,5 @@
-errors = require "./errors"
-slaputils = require "slaputils"
+errors = require './errors'
+slaputils = require 'slaputils'
 
 class Component
 
@@ -20,7 +20,13 @@ class Component
   #    asynchronous code.
   constructor: (@runtime, @role, @iid, @incnum, @localData, @parameters
   , @dependencies, @offerings) ->
-    # TODO
+    try
+      if @parameters?
+        @logger.info "Component parameters: #{JSON.stringify @parameters}"
+      if @resources?
+        @logger.info "Component parameters: #{JSON.stringify @resources}"
+    catch e
+      @logger.error "Error logging component configuration. #{e.message ? e}"
 
   # Starts the execution.
   run: ->
