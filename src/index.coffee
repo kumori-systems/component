@@ -19,7 +19,8 @@ class Component
   #    asynchronous code.
   constructor: (@runtime, @role, @iid, @incnum, @localData, @resources
   ,@parameters, @dependencies, @offerings) ->
-    @runtime.setLogger [Component]
+    if not @logger?
+      @runtime.setLogger [Component]
     try
       if @parameters?
         @logger.info "Component parameters: #{JSON.stringify @parameters}"
