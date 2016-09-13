@@ -19,8 +19,15 @@ class Component
   #    asynchronous code.
   constructor: (@runtime, @role, @iid, @incnum, @localData, @resources
   ,@parameters, @dependencies, @offerings) ->
-    @runtime.setLogger [Component]
-    # TODO
+    if not @logger?
+      @runtime.setLogger [Component]
+    try
+      if @parameters?
+        @logger.info "Component parameters: #{JSON.stringify @parameters}"
+      if @resources?
+        @logger.info "Component parameters: #{JSON.stringify @resources}"
+    catch e
+      @logger.error "Error logging component configuration. #{e.message ? e}"
 
   # Starts the execution.
   run: ->
