@@ -25,7 +25,7 @@ class Component
       if @parameters?
         @logger.info "Component parameters: #{JSON.stringify @parameters}"
       if @resources?
-        @logger.info "Component parameters: #{JSON.stringify @resources}"
+        @logger.info "Component resources: #{JSON.stringify @resources}"
     catch e
       @logger.error "Error logging component configuration. #{e.message ? e}"
 
