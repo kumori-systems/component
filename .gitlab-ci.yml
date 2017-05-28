@@ -1,4 +1,4 @@
-image: registry.gitlab.com/ecloud/ci-runners:latest
+image: registry.gitlab.com/ecloud/ci-runners/ts:latest
 
 variables:
   PROJECT: "component"
@@ -23,7 +23,6 @@ test:
     - npm version
     - npm install
     - npm run spec
-    - npm run lint
   except:
     - master@ECloud/component
     - triggers
