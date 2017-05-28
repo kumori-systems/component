@@ -1,5 +1,5 @@
 {
-  "name": "component",
+  "name": "@kumori/component",
   "version": "0.0.2",
   "description": "ICC VM component interface",
   "author": "Josep Bernabé <jbgisber@iti.upv.es>",
