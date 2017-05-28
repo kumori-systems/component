@@ -4,6 +4,7 @@
   "description": "ICC VM component interface",
   "author": "Josep Bernabé <jbgisber@iti.upv.es>",
   "private": true,
+  "types" : "dist/index.d.ts",
   "scripts": {
     "dist": "fly dist",
     "devbuild": "fly build",

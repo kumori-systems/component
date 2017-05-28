@@ -26,7 +26,7 @@ exports.mrproper = function * (fly) {
   yield fly.clear(['dist'])
 }
 
-exports.build = function * (fly) {
+exports.buildozer = function * (fly) {
   let tsopts = getJSON('./tsconfig.json')
     ;
   
@@ -35,9 +35,16 @@ exports.build = function * (fly) {
     .target("build/src")
 }
 
+
+exports.build = function * (fly) {
+  yield fly.source("src/**/*.ts")
+    .shell("tsc --outDir build/src --rootDir src")
+}
+
+
 exports.dist = function * (fly) {
   yield fly.serial(['build'])
-    .source(['build/src/**/*.js'])
+    .source(['build/src/**/*.js','build/src/**/*.d.ts'])
     .target('dist')
 }
 
