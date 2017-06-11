@@ -70,6 +70,7 @@ export class BaseComponent implements Component {
     , public dependencies: ChannelHash
     , public offerings: ChannelHash
     ) {
+    runtime.setLogger([BaseComponent])
   }
 
   run (): void {

@@ -7,4 +7,5 @@ export interface Runtime {
     createReplyChannel(requestHandler: Server): Reply;
     createDuplexChannel(): Duplex;
     log(loglevel: LogLevel, message: string): void;
+    setLogger(items: any[]): void;
 }

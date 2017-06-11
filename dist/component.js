@@ -23,6 +23,7 @@ class BaseComponent {
         this.parameters = parameters; // Again, an object used as a dictionary
         this.dependencies = dependencies;
         this.offerings = offerings;
+        runtime.setLogger([BaseComponent]);
     }
     run() {
         this._pid = setInterval(() => this.runtime.ping(), runtime_1.PING_INTERVAL);

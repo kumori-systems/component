@@ -1,10 +1,10 @@
 {
   "name": "@kumori/component",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "ICC VM component interface",
   "author": "Josep Bernabé <jbgisber@iti.upv.es>",
   "private": true,
-  "types" : "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dist": "fly dist",
     "devbuild": "fly build",
