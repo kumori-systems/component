@@ -1,5 +1,4 @@
 /// <reference types="node" />
-import { Logger } from './logger';
 import { Runtime } from './runtime';
 import { ChannelHash } from './channels';
 export declare type Resource = any;
@@ -41,7 +40,7 @@ export declare class BaseComponent implements Component {
     parameters: Object;
     dependencies: ChannelHash;
     offerings: ChannelHash;
-    logger: Logger;
+    logger: any;
     _pid?: NodeJS.Timer;
     constructor(runtime: Runtime, role: string, iid: string, incnum: number, localData: string, resources: Object, parameters: Object, dependencies: ChannelHash, offerings: ChannelHash);
     run(): void;

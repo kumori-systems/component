@@ -1,4 +1,3 @@
-import { Logger } from './logger'
 import { Runtime, PING_INTERVAL } from './runtime'
 import { ChannelHash } from './channels'
 import { COMPONENT_SHUTDOWN_ERROR } from './errors'
@@ -56,7 +55,7 @@ export declare var Component: {
  * to create a proper component class.
  */
 export class BaseComponent implements Component {
-  logger: Logger
+  logger: any
   _pid?: NodeJS.Timer
 
   constructor
@@ -70,14 +69,44 @@ export class BaseComponent implements Component {
     , public dependencies: ChannelHash
     , public offerings: ChannelHash
     ) {
-    runtime.setLogger([BaseComponent])
+
+    // If a k-logger parameter is defined, use it to inject a logger
+    let kloggerCfg: any = this.parameters.klogger
+    if ( !(kloggerCfg === undefined) && !(kloggerCfg === null) ) {
+      this.logger.configure(kloggerCfg)
+      this.logger.setContext(this.runtime.deployment)
+      this.logger.setOwner(this.iid)
+      if ( !(kloggerCfg.runtime === undefined)
+      && !(kloggerCfg.runtime === null) ) {
+        // Apply the same config to runtime
+        this.runtime.configureLogger(kloggerCfg)
+      }
+      if (!(kloggerCfg.handleExceptions === false)) { // Default value: true
+        process.on('uncaughtException', (e: Error) => {
+          this.logger.error(`Component. UncaughtException: ${e}, ${e.message},
+${e.stack}`)
+          setTimeout(() => {
+            process.exit(1)
+          }, 250)
+        })
+        process.on('unhandledRejection', (reason: string, p: Promise<any>) => {
+          this.logger.warn(`Component. Possibly Unhandled Rejection:
+Promise ${p}, Reason ${JSON.stringify(reason)}`)
+        })
+        process.on('rejectionHandled', (p: Promise<any>) => {
+          this.logger.warn(`Component. Rejection Handled: Promise ${p}`)
+        })
+      }
+    }
   }
 
   run (): void {
     this._pid = setInterval(() => this.runtime.ping(), PING_INTERVAL)
+    this.logger.info('BaseComponent.run')
   }
 
   shutdown (): void {
+    this.logger.info('BaseComponent.shutdown')
     try {
       if (this._pid !== undefined) {
         clearInterval(this._pid)
@@ -91,7 +120,6 @@ export class BaseComponent implements Component {
   reconfig (resources: ResourceHash, parameters: ConfigurationHash): boolean {
     resources = resources
     parameters = parameters
-
     return true
   }
 }

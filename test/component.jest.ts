@@ -1,9 +1,9 @@
 import { BaseComponent as Component } from '../src/component'
 import { Runtime } from '../src/runtime'
-import { LogLevel, Logger } from '../src/logger'
 import { Duplex, Server, Reply, Channel } from '../src/channels'
 
 class FakeRuntime implements Runtime {
+  deployment: string = 'dep1'
   private _pingCount = 0
 
   ping (): void {
@@ -24,27 +24,60 @@ class FakeRuntime implements Runtime {
   createDuplexChannel (): Duplex {
     throw new Error('Method not implemented.')
   }
-  log (loglevel: LogLevel, message: string): void {
-    switch (loglevel) {
-      case LogLevel.DEBUG:
-        console.debug(message)
-        break
-      case LogLevel.ERROR:
-        console.error(message)
-        break
-      case LogLevel.INFO:
-        console.info(message)
-        break
-      case LogLevel.WARN:
-        console.warn(message)
-        break
-      case LogLevel.SILLY:
-      default:
-        console.log(message)
-        break
+  configureLogger (cfg: any): void {
+    // Do nothing - mock
+  }
+}
+
+// TEMPORARY PATCH - TICKET1281
+// k-logger is not ready to be used from typescript projects:
+// - When the component is used from ECloud, is not a problem (because the
+//   component is loaded by runtime-agent - a coffee project).
+// - When the component is used in unit tests, its a problem.
+// So, a FakeLogger is used
+class FakeLogger {
+  private _lines: string[]
+  private _configured: boolean
+  private _iid: string
+  private _deployment: string
+  constructor () {
+    this._lines = []
+    this._configured = false
+  }
+  configure (kloggerCfg) { this._configured = true }
+  setContext (deployment) { this._deployment = deployment }
+  setOwner (iid) { this._iid = iid }
+  debug (message) { this.log(message) }
+  info (message) { this.log(message) }
+  warn (message) { this.log(message) }
+  error (message) { this.log(message) }
+  log (message) {
+    if (this._configured) {
+      this._lines.push(`iid ${this._iid} dep ${this._deployment} ${message}`)
+    } else {
+      this._lines.push('Not configured!!')
     }
   }
+  getLastTrace () {
+    if (this._lines.length > 0) {
+      return this._lines[this._lines.length - 1]
+    } else {
+      return ''
+    }
+  }
+}
 
+// Logger injection
+function setLogger (clazz, logger) {
+  Object.defineProperty(clazz.prototype, 'logger', {
+    get: function () {
+      if (this['_logger'] === undefined) this['_logger'] = logger
+      return this['_logger']
+    },
+    set: function (value) {
+      this['_logger'] = value
+    }
+  })
 }
 
 /**
@@ -65,41 +98,37 @@ function pingsAfter (it: number): Promise<number> {
  *  Hold a mock runtime and an instance of a component under test.
  */
 // tslint:disable-next-line:one-variable-per-declaration
-let _fakeRuntime: any
+let _fakeRuntime: FakeRuntime
   , _component: Component
+  , _fakeLogger: FakeLogger
 
 beforeAll(() => {
   _fakeRuntime = new FakeRuntime()
-  _component = new Component
-    (_fakeRuntime
-    , '', '', 0, '', {}, {}, {}, {}
-    )
-  _component.logger = new Logger(_fakeRuntime.log)
+  _fakeLogger = new FakeLogger()
+  setLogger(Component, _fakeLogger)
+  _component = new Component(_fakeRuntime, '', 'iid1', 0, '', {},
+  { klogger: {} }, {}, {})
 })
 
-test('Component does not ping after instantiation',
-  async () => {
-    expect(await pingsAfter(2000))
-      .toBe(0)
-
-  })
+test('Component does not ping after instantiation', async () => {
+  expect(await pingsAfter(2000)).toBe(0)
+})
 
 test('Component pings after run call', async () => {
   _fakeRuntime.resetPings()
   _component.run()
+  expect(await pingsAfter(2000)).toBeGreaterThan(0)
+})
 
-  expect(await pingsAfter(2000))
-    .toBeGreaterThan(0)
-
+test('Log traces after run method', () => {
+  let expectedTrace = 'iid iid1 dep dep1 BaseComponent.run'
+  expect(_fakeLogger.getLastTrace()).toBe(expectedTrace)
 })
 
 test('Component stops pings after shutdown call', async () => {
   _fakeRuntime.resetPings()
   _component.shutdown()
-
-  expect(await pingsAfter(2000))
-    .toBe(0)
-
+  expect(await pingsAfter(2000)).toBe(0)
 })
 
 test('Component accepts reconfig', () => {
