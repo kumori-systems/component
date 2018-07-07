@@ -15,7 +15,9 @@
     "superclean": "fly superclean"
   },
   "main": "dist/index",
-  "dependencies": {},
+  "dependencies": {
+    "k-logger": "git+ssh://git@gitlab.com:ECloud/k-logger.git#master"
+  },
   "devDependencies": {
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
