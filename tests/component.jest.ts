@@ -1,13 +1,14 @@
 import { BaseComponent as Component } from '../src/component'
 import { Runtime } from '../src/runtime'
-import { Duplex, Server, Reply, Channel } from '../src/channels'
+import { Server, Reply, Channel } from '../src/channels'
 
 class FakeRuntime implements Runtime {
   deployment: string = 'dep1'
   private _pingCount = 0
 
-  ping (): void {
+  ping (): Promise<void> {
     this._pingCount++
+    return Promise.resolve()
   }
   get pings () {
     return this._pingCount
@@ -18,14 +19,12 @@ class FakeRuntime implements Runtime {
   timeout (channel: Channel, ...args: any[]): void {
     throw new Error(`Method not implemented: ${channel === null}:${args.length}`)
   }
-  createReplyChannel (requestHandler: Server): Reply {
+  createChannel (requestHandler: Server): Reply {
     throw new Error(`Method not implemented. ${requestHandler === null} `)
   }
-  createDuplexChannel (): Duplex {
-    throw new Error('Method not implemented.')
-  }
-  configureLogger (cfg: any): void {
+  configureLogger (cfg: any): Promise<void> {
     // Do nothing - mock
+    return Promise.resolve()
   }
 }
 
@@ -120,7 +119,7 @@ test('Component pings after run call', async () => {
   expect(await pingsAfter(2000)).toBeGreaterThan(0)
 })
 
-test('Log traces after run method', () => {
+test.skip('Log traces after run method --> Skipped: logs removed from BaseComponent', () => {
   let expectedTrace = 'iid iid1 dep dep1 BaseComponent.run'
   expect(_fakeLogger.getLastTrace()).toBe(expectedTrace)
 })

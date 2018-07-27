@@ -1,15 +1,17 @@
 import { EventEmitter } from 'events'
 
-export type Segment = Buffer
-export type Data = Segment[]
+export type Segment = Buffer | String
+export type Message = Segment[]
 
 export interface ChannelHash {
   [index: string]: Channel
 }
+export type Channels = Channel[]
 
-export interface Message {
-  msg: Data
-  dyn?: ChannelHash
+export type MessageAsArray = Promise<[Message, Channels] | [Message]>
+export interface MessageAsObject {
+  message: Message
+  dynamicChannels: Channels
 }
 
 /** TargetId, used to distinguish channels connected to a
@@ -21,41 +23,25 @@ export interface Tid {
   service: string
 }
 
-export type ChannelType =
-  'Request'
-  | 'Reply'
-  | 'Duplex'
-  | 'Receive'
-  | 'Send'
-
 /**
  * Every channel is an event emitter
  */
 export interface Channel extends EventEmitter {
-  type: ChannelType
+  name: string
+  on (event: 'error', listener: (error: Error) => void): this
 }
 
 /***********   Server functions  */
 
 // A server handler for request/reply interactions
 export interface Server {
-  (msg: Message): Promise<Message>
+  (message: Message, channels?: Channels): Promise<MessageAsArray>
 }
 
-// A handler for receiving simple "message" events
-export interface MessageHandler {
-  (msg: Message): void
-}
-
-// A handler to receive message events carrying the identity of a member of a complete connector
-// through a duplex channel.
-export interface CompleteMessageHandler {
-  (msg: Message, sender: Tid): void
-}
-
-// A handler to process membership changes through a duplex connector
-export interface ChangeMembershipHandler {
-  (membership: Tid[]): void
+// Configuration when a request message is sent
+export interface RequestConfig {
+  timeout?: number
+  key?: number
 }
 
 /******************************* */
@@ -66,51 +52,33 @@ export interface ChangeMembershipHandler {
  * Emits the following event: "destinationUnavailable"
  */
 export interface Reply extends Channel {
-  type: 'Reply'
-
   handleRequest: Server
-
-  readonly handlers: {
-    destinationUnavailable: MessageHandler;  // will receive "destinationUnavailable" events
-  }
 }
 
 export interface Request extends Channel {
-  type: 'Request'
-
-  sendRequest (msg: Message): Promise<Message>  // Promise fails if undeliverable
+  sendRequest (message: Message, channels?: Channels, config?: RequestConfig): Promise<MessageAsArray | MessageAsObject>  // Promise fails if undeliverable
 }
 
 export interface Receive extends Channel {
-  type: 'Receive'
-
-  readonly subscribed: string[]
-  readonly handlers: {
-    message: MessageHandler
-  }
+  readonly topics: string[]
 
   subscribe (topic: string): void
   unsusbscribe (topic: string): void
-
+  on (event: 'message', listener: (message: Message, sender: Tid, channels?: Channels) => void): this
+  on (event: string, listener: Function): this
 }
 
 /**
  *  Note that this is a Datagram semantics
  */
 export interface Send extends Channel {
-  type: 'Send'
-
-  send (msg: Message, topic?: string): void
+  send (message: Message, channels?: Channels, topic?: string): void
 }
 
 export interface Duplex extends Channel {
-  type: 'Duplex'
-  readonly handlers: {
-    message: CompleteMessageHandler;  // Handler of "message" events
-    destinationUnavailable: CompleteMessageHandler;  // Handler for the "destinationUnavailable" events
-    changeMembership: ChangeMembershipHandler; // Handler for membership change notifications
-  }
-
-  send (msg: Message, target: Tid): void
+  send (message: Message, target: Tid, channels?: Channels): void
   getMembership (): Tid[]
+  on (event: 'message', listener: (message: Message, sender: Tid, channels?: Channels) => void): this
+  on (event: 'changeMembership', listener: (membership: Tid[]) => void): this
+  on (event: string, listener: Function): this
 }
