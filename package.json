@@ -23,6 +23,8 @@
     "@taskr/typescript": "^1.1.0",
     "@types/jest": "^19.2.3",
     "jest": "^23.4.1",
+    "semantic-release": "^15.9.1",
+    "semantic-release-shared-config": "gitlab:kumori/semantic-release-shared-config",
     "taskr": "^1.1.0",
     "ts-jest": "^23.0.1",
     "tslint": "^5.11.0",
@@ -36,6 +38,12 @@
     "linux",
     "darwin"
   ],
+  "release": {
+    "extends": "semantic-release-shared-config",
+    "noCi": false,
+    "dryRun": false,
+    "npmPublish": true
+  },
   "config": {
     "pre-git": {
       "commit-msg": "simple",
