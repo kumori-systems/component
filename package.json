@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Kumori Base Component",
   "author": "Kumori Systems <info@kumori.systems>",
+  "license": "MIT",
   "repository": "github:kumori-systems/component",
   "types": "lib/index.d.ts",
   "scripts": {
