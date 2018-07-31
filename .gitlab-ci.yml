@@ -14,10 +14,6 @@ test_master:
   stage: test
   script:
     - npm version
-<<<<<<< HEAD
-    - npm install
-=======
->>>>>>> ticket1300
     - npm test
     - npm run lint
   artifacts:
@@ -31,10 +27,6 @@ test:
   stage: test
   script:
     - npm version
-<<<<<<< HEAD
-    - npm install
-=======
->>>>>>> ticket1300
     - npm test
   except:
     - master@ECloud/component
