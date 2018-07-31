@@ -70,6 +70,7 @@ export class BaseComponent implements Component {
   }
 
   run (): void {
+    this.runtime.ping()
     this._pid = setInterval(() => this.runtime.ping(), PING_INTERVAL)
   }
 
