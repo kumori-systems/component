@@ -1,8 +1,11 @@
-image: registry.gitlab.com/ecloud/ci-runners/ts:latest
+image: registry.gitlab.com/ecloud/ci-runners/native:2_0_0
 
 stages:
   - test
   - release
+
+before_script:
+  - npm install
 
 variables:
   PROJECT: "component"
@@ -11,7 +14,10 @@ test_master:
   stage: test
   script:
     - npm version
+<<<<<<< HEAD
     - npm install
+=======
+>>>>>>> ticket1300
     - npm test
     - npm run lint
   artifacts:
@@ -25,7 +31,10 @@ test:
   stage: test
   script:
     - npm version
+<<<<<<< HEAD
     - npm install
+=======
+>>>>>>> ticket1300
     - npm test
   except:
     - master@ECloud/component
