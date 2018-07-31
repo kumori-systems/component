@@ -1,5 +1,9 @@
 image: registry.gitlab.com/ecloud/ci-runners/ts:latest
 
+stages:
+  - test
+  - release
+
 variables:
   PROJECT: "component"
 
@@ -8,7 +12,7 @@ test_master:
   script:
     - npm version
     - npm install
-    - npm run spec
+    - npm test
     - npm run lint
   artifacts:
     paths:
@@ -22,8 +26,24 @@ test:
   script:
     - npm version
     - npm install
-    - npm run spec
+    - npm test
   except:
     - master@ECloud/component
     - triggers
+
+publish:
+  stage: release
+  script:
+    - |
+      BEFORE=$( npx -c 'echo "$npm_package_version"' )
+      npx semantic-release
+      AFTER=$( npx -c 'echo "$npm_package_version"' )
+      if [[ $BEFORE != $AFTER ]]; then
+        LAST_COMMIT=$( git rev-parse HEAD ) && git checkout master && git merge $LAST_COMMIT
+        git remote add gitlab https://oauth2:$GLB_TOKEN@gitlab.com/$CI_PROJECT_PATH.git
+        git push gitlab master
+        LAST_VERSION=$( git describe --tags ) && git push gitlab $LAST_VERSION
+      fi
+  only:
+    - master
 

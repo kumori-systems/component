@@ -1,37 +1,36 @@
 {
   "name": "@kumori/component",
-  "version": "0.0.3",
-  "description": "ICC VM component interface",
-  "author": "Josep Bernabé <jbgisber@iti.upv.es>",
-  "private": true,
-  "types": "dist/index.d.ts",
+  "version": "1.0.2",
+  "description": "Kumori Base Component",
+  "author": "Kumori Systems <info@kumori.systems>",
+  "license": "MIT",
+  "repository": "github:kumori-systems/component",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "dist": "fly dist",
-    "devbuild": "fly build",
-    "lint": "tslint src/**/*.ts test/**/*.ts",
-    "prespec": "npm run lint",
-    "spec": "fly spec ",
-    "clean": "fly clean",
-    "superclean": "fly superclean"
+    "build": "taskr build",
+    "lint": "taskr lint",
+    "test": "taskr test ",
+    "clean": "taskr clean",
+    "superclean": "taskr superclean"
   },
-  "main": "dist/index",
+  "main": "lib/index",
   "dependencies": {
-    "k-logger": "git+ssh://git@gitlab.com:ECloud/k-logger.git#master"
+    "@types/node": "^10.5.3"
   },
   "devDependencies": {
+    "@taskr/clear": "^1.1.0",
+    "@taskr/jest": "^1.1.1",
+    "@taskr/shell": "^1.1.0",
+    "@taskr/typescript": "^1.1.0",
     "@types/jest": "^19.2.3",
-    "@types/node": "^7.0.18",
-    "fly": "^2.0.6",
-    "fly-clear": "^1.0.1",
-    "fly-mocha": "^1.0.2",
-    "fly-shell": "^2.1.0",
-    "fly-typescript": "^1.1.0",
-    "fly-watch": "^1.1.1",
-    "jest": "^20.0.3",
-    "ts-jest": "^20.0.4",
-    "tslint": "^5.2.0",
-    "tslint-config-standard": "^5.0.2",
-    "typescript": "^2.3.2"
+    "jest": "^23.4.1",
+    "semantic-release": "^15.9.1",
+    "semantic-release-shared-config": "gitlab:kumori/semantic-release-shared-config",
+    "taskr": "^1.1.0",
+    "ts-jest": "^23.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-standard": "^7.1.0",
+    "typescript": "^2.9.2"
   },
   "engines": {
     "node": ">=4.2.1"
@@ -40,6 +39,12 @@
     "linux",
     "darwin"
   ],
+  "release": {
+    "extends": "semantic-release-shared-config",
+    "noCi": false,
+    "dryRun": false,
+    "npmPublish": true
+  },
   "config": {
     "pre-git": {
       "commit-msg": "simple",

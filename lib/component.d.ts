@@ -24,7 +24,7 @@ export interface Component {
  *  is what must be exported from the main module of the component with export = <...>
  */
 export declare var Component: {
-    new (runtime: Runtime, role: string, iid: string, incnum: number, localData: string, resources: Object, parameters: Object, dependencies: ChannelHash, offerings: ChannelHash): Component;
+    new (runtime: Runtime, role: string, iid: string, incnum: number, localData: string, resources: ResourceHash, parameters: ConfigurationHash, dependencies: ChannelHash, offerings: ChannelHash): Component;
 };
 /**
  *  This is just an example Base Component. There is no  need to actually extend this class
@@ -40,7 +40,6 @@ export declare class BaseComponent implements Component {
     parameters: Object;
     dependencies: ChannelHash;
     offerings: ChannelHash;
-    logger: any;
     _pid?: NodeJS.Timer;
     constructor(runtime: Runtime, role: string, iid: string, incnum: number, localData: string, resources: Object, parameters: Object, dependencies: ChannelHash, offerings: ChannelHash);
     run(): void;

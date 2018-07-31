@@ -1,6 +1,5 @@
 import { Runtime, PING_INTERVAL } from './runtime'
 import { ChannelHash } from './channels'
-import { COMPONENT_SHUTDOWN_ERROR } from './errors'
 
 export type Resource = any
 export type ConfParam = any
@@ -43,8 +42,8 @@ export declare var Component: {
     , iid: string
     , incnum: number       // An integer, also
     , localData: string    // TODO: what is this? a Path?
-    , resources: Object   // A dictionary of key/value pairs. TODO: revise this definition
-    , parameters: Object  // Again, an object used as a dictionary
+    , resources: ResourceHash   // A dictionary of key/value pairs. TODO: revise this definition
+    , parameters: ConfigurationHash  // Again, an object used as a dictionary
     , dependencies: ChannelHash
     , offerings: ChannelHash
   ): Component;
@@ -55,7 +54,6 @@ export declare var Component: {
  * to create a proper component class.
  */
 export class BaseComponent implements Component {
-  logger: any
   _pid?: NodeJS.Timer
 
   constructor
@@ -69,51 +67,17 @@ export class BaseComponent implements Component {
     , public dependencies: ChannelHash
     , public offerings: ChannelHash
     ) {
-
-    // If a k-logger parameter is defined, use it to inject a logger
-    let kloggerCfg: any = this.parameters.klogger
-    if ( !(kloggerCfg === undefined) && !(kloggerCfg === null) ) {
-      this.logger.configure(kloggerCfg)
-      this.logger.setContext(this.runtime.deployment)
-      this.logger.setOwner(this.iid)
-      if ( !(kloggerCfg.runtime === undefined)
-      && !(kloggerCfg.runtime === null) ) {
-        // Apply the same config to runtime
-        this.runtime.configureLogger(kloggerCfg)
-      }
-      if (!(kloggerCfg.handleExceptions === false)) { // Default value: true
-        process.on('uncaughtException', (e: Error) => {
-          this.logger.error(`Component. UncaughtException: ${e}, ${e.message},
-${e.stack}`)
-          setTimeout(() => {
-            process.exit(1)
-          }, 250)
-        })
-        process.on('unhandledRejection', (reason: string, p: Promise<any>) => {
-          this.logger.warn(`Component. Possibly Unhandled Rejection:
-Promise ${p}, Reason ${JSON.stringify(reason)}`)
-        })
-        process.on('rejectionHandled', (p: Promise<any>) => {
-          this.logger.warn(`Component. Rejection Handled: Promise ${p}`)
-        })
-      }
-    }
   }
 
   run (): void {
+    this.runtime.ping()
     this._pid = setInterval(() => this.runtime.ping(), PING_INTERVAL)
-    this.logger.info('BaseComponent.run')
   }
 
   shutdown (): void {
-    this.logger.info('BaseComponent.shutdown')
-    try {
-      if (this._pid !== undefined) {
-        clearInterval(this._pid)
-        this._pid = undefined
-      }
-    } catch (error) {
-      this.logger.warn(COMPONENT_SHUTDOWN_ERROR, this.iid, error.message)
+    if (this._pid !== undefined) {
+      clearInterval(this._pid)
+      this._pid = undefined
     }
   }
 
