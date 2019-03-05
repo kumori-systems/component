@@ -82,8 +82,8 @@ export class BaseComponent implements Component {
   }
 
   reconfig (resources: ResourceHash, parameters: ConfigurationHash): boolean {
-    resources = resources
-    parameters = parameters
+    this.resources = resources
+    this.parameters = parameters
     return true
   }
 }
