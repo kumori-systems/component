@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/kumori-systems/component/compare/v1.0.4...v1.0.5) (2019-05-06)
+
+
+### Bug Fixes
+
+* **TS compilation:** add lib compiles for TS ([0551132](https://github.com/kumori-systems/component/commit/0551132))
+
 ## [1.0.4](https://github.com/kumori-systems/component/compare/v1.0.3...v1.0.4) (2019-05-06)
 
 
