@@ -8,7 +8,7 @@ export interface ChannelHash {
 }
 export type Channels = Channel[];
 
-export type MessageAsArray = Promise<[Message, Channels] | [Message]>;
+export type MessageAsArray = [Message, Channels] | [Message];
 export interface MessageAsObject {
   message: Message;
   dynamicChannels: Channels;
@@ -60,7 +60,7 @@ export interface Request extends Channel {
     message: Message,
     channels?: Channels,
     config?: RequestConfig
-  ): MessageAsArray | MessageAsObject; // Promise fails if undeliverable
+  ): Promise<MessageAsArray> | Promise<MessageAsObject>; // Promise fails if undeliverable
 }
 
 export interface Receive extends Channel {
