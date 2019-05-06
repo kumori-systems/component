@@ -1,12 +1,12 @@
 /// <reference types="node" />
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 export declare type Segment = Buffer | String;
 export declare type Message = Segment[];
 export interface ChannelHash {
     [index: string]: Channel;
 }
 export declare type Channels = Channel[];
-export declare type MessageAsArray = Promise<[Message, Channels] | [Message]>;
+export declare type MessageAsArray = [Message, Channels] | [Message];
 export interface MessageAsObject {
     message: Message;
     dynamicChannels: Channels;
@@ -24,7 +24,7 @@ export interface Tid {
  */
 export interface Channel extends EventEmitter {
     name: string;
-    on(event: 'error', listener: (error: Error) => void): this;
+    on(event: "error", listener: (error: Error) => void): this;
 }
 /***********   Server functions  */
 export interface Server {
@@ -43,13 +43,13 @@ export interface Reply extends Channel {
     handleRequest: Server;
 }
 export interface Request extends Channel {
-    sendRequest(message: Message, channels?: Channels, config?: RequestConfig): Promise<MessageAsArray | MessageAsObject>;
+    sendRequest(message: Message, channels?: Channels, config?: RequestConfig): Promise<MessageAsArray> | Promise<MessageAsObject>;
 }
 export interface Receive extends Channel {
     readonly topics: string[];
     subscribe(topic: string): void;
     unsusbscribe(topic: string): void;
-    on(event: 'message', listener: (message: Message, sender: Tid, channels?: Channels) => void): this;
+    on(event: "message", listener: (message: Message, sender: Tid, channels?: Channels) => void): this;
     on(event: string, listener: Function): this;
 }
 /**
@@ -61,7 +61,7 @@ export interface Send extends Channel {
 export interface Duplex extends Channel {
     send(message: Message, target: Tid, channels?: Channels): void;
     getMembership(): Tid[];
-    on(event: 'message', listener: (message: Message, sender: Tid, channels?: Channels) => void): this;
-    on(event: 'changeMembership', listener: (membership: Tid[]) => void): this;
+    on(event: "message", listener: (message: Message, sender: Tid, channels?: Channels) => void): this;
+    on(event: "changeMembership", listener: (membership: Tid[]) => void): this;
     on(event: string, listener: Function): this;
 }
