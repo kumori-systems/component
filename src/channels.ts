@@ -61,6 +61,8 @@ export interface Request extends Channel {
     channels?: Channels,
     config?: RequestConfig
   ): Promise<MessageAsArray> | Promise<MessageAsObject>; // Promise fails if undeliverable
+  on(event: 'invalidated', listener: (reason: string) => void): this; // for dynamics
+  on(event: string, listener: Function): this;
 }
 
 export interface Receive extends Channel {

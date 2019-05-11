@@ -44,6 +44,8 @@ export interface Reply extends Channel {
 }
 export interface Request extends Channel {
     sendRequest(message: Message, channels?: Channels, config?: RequestConfig): Promise<MessageAsArray> | Promise<MessageAsObject>;
+    on(event: 'invalidated', listener: (reason: string) => void): this;
+    on(event: string, listener: Function): this;
 }
 export interface Receive extends Channel {
     readonly topics: string[];
