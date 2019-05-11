@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/kumori-systems/component/compare/v1.0.5...v1.0.6) (2019-05-11)
+
+
+### Bug Fixes
+
+* **DynamicChannels:** added support for reacting to a dynamic channel invalidation ([c4d3a88](https://github.com/kumori-systems/component/commit/c4d3a88))
+
 ## [1.0.5](https://github.com/kumori-systems/component/compare/v1.0.4...v1.0.5) (2019-05-06)
 
 
