@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/kumori-systems/component/compare/v1.0.6...v1.0.7) (2019-10-24)
+
+
+### Bug Fixes
+
+* **receive:** the 'message' events listener was incorrectly declared for receive channels ([1d1c8e3](https://github.com/kumori-systems/component/commit/1d1c8e3ddf97f420f5424639f94c707be6958c32))
+
 ## [1.0.6](https://github.com/kumori-systems/component/compare/v1.0.5...v1.0.6) (2019-05-11)
 
 
