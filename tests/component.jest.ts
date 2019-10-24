@@ -22,7 +22,7 @@ class FakeRuntime implements Runtime {
   createChannel (requestHandler: Server): Reply {
     throw new Error(`Method not implemented. ${requestHandler === null} `)
   }
-  configureLogger (cfg: any): Promise<void> {
+  configureLogger (_: any): Promise<void> {
     // Do nothing - mock
     return Promise.resolve()
   }
@@ -40,17 +40,19 @@ class FakeLogger {
   private _iid: string
   private _deployment: string
   constructor () {
+    this._iid = 'undefined'
+    this._deployment = 'undefined'
     this._lines = []
     this._configured = false
   }
-  configure (kloggerCfg) { this._configured = true }
-  setContext (deployment) { this._deployment = deployment }
-  setOwner (iid) { this._iid = iid }
-  debug (message) { this.log(message) }
-  info (message) { this.log(message) }
-  warn (message) { this.log(message) }
-  error (message) { this.log(message) }
-  log (message) {
+  configure (_: any) { this._configured = true }
+  setContext (deployment: string) { this._deployment = deployment }
+  setOwner (iid: string) { this._iid = iid }
+  debug (message: string) { this.log(message) }
+  info (message: string) { this.log(message) }
+  warn (message: string) { this.log(message) }
+  error (message: string) { this.log(message) }
+  log (message: string) {
     if (this._configured) {
       this._lines.push(`iid ${this._iid} dep ${this._deployment} ${message}`)
     } else {
@@ -67,7 +69,7 @@ class FakeLogger {
 }
 
 // Logger injection
-function setLogger (clazz, logger) {
+function setLogger (clazz: any, logger: any) {
   Object.defineProperty(clazz.prototype, 'logger', {
     get: function () {
       if (this['_logger'] === undefined) this['_logger'] = logger

@@ -62,7 +62,7 @@ export interface Request extends Channel {
     config?: RequestConfig
   ): Promise<MessageAsArray> | Promise<MessageAsObject>; // Promise fails if undeliverable
   /**
-   * Only for dynamic channels     
+   * Only for dynamic channels
    */
   on(event: 'invalidated', listener: (reason: string) => void): this;
   on(event: string, listener: Function): this;
@@ -75,7 +75,7 @@ export interface Receive extends Channel {
   unsusbscribe(topic: string): void;
   on(
     event: "message",
-    listener: (message: Message, sender: Tid, channels?: Channels) => void
+    listener: (message: Message, channels?: Channels, topic?: string, sender?: Tid) => void
   ): this;
   on(event: string, listener: Function): this;
 }

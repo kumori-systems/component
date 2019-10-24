@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { Runtime } from './runtime';
 import { ChannelHash } from './channels';
 export declare type Resource = any;
