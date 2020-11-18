@@ -24,7 +24,7 @@
     "@taskr/typescript": "^1.1.0",
     "@types/jest": "^19.2.3",
     "jest": "^23.4.1",
-    "semantic-release": "^15.9.1",
+    "semantic-release": "^17.2.3",
     "semantic-release-shared-config": "gitlab:kumori/semantic-release-shared-config",
     "taskr": "^1.1.0",
     "ts-jest": "^23.0.1",
